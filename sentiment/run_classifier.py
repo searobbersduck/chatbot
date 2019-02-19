@@ -489,7 +489,7 @@ class BaikeCatsProcessor(DataProcessor):
     def get_labels(self):
         lables = []
         with open('../data/baike_qa2019/cats.json', 'r', encoding='utf8') as f:
-            labels = json.load(f)
+            labels = list(json.load(f))
         return labels
 
     def _create_examples(self, infile, set_type):
@@ -507,8 +507,8 @@ class BaikeCatsProcessor(DataProcessor):
                 label = "0"
             else:
                 text_a = tokenization.convert_to_unicode(title)
-                # label = tokenization.convert_to_unicode(str(elem['title']))
-                label = str(elem['category'])
+                label = tokenization.convert_to_unicode(str(elem['category']))
+                label = str(label)
             examples.append(
                 InputExample(guid=guid, text_a=text_a, text_b=None, label=label))
         return examples
