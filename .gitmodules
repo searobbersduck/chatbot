@@ -1,3 +1,6 @@
 [submodule "sentiment/bert"]
 	path = sentiment/bert
 	url = https://github.com/google-research/bert.git
+[submodule "chat/bert"]
+	path = chat/bert
+	url = https://github.com/google-research/bert.git
