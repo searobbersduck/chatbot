@@ -232,10 +232,11 @@ class ChatModel:
     def _convert_tensor_to_sparse(self, a, end_token):
         indices = tf.where(tf.not_equal(a, 0)&tf.not_equal(a, end_token))
         values = tf.gather_nd(a, indices)
-        sparse_a = tf.SparseTensor(indices, values, a.shape)
+        sparse_a = tf.SparseTensor(indices, values, tf.shape(a, out_type=tf.int64))
         return sparse_a
 
 def test_ChatModel():
+    print('test_ChatModel begin!')
     vocab_file = './model/chinese_L-12_H-768_A-12/vocab.txt'
     config_file = './model/chinese_L-12_H-768_A-12/bert_config.json'
     ckpt_file = './model/chinese_L-12_H-768_A-12/bert_model.ckpt'
@@ -250,7 +251,10 @@ def test_ChatModel():
         beam_width=5
     )
     chatmodel = ChatModel(chatmodel_config)
-    chatmodel.loss()
+    loss, distance, p_output = chatmodel.loss()
+    print('loss:\t', loss)
+    print('distance:\t', distance)
+    print('predict output:\t', p_output)
     print('test_ChatModel end!')
 
 if __name__ == '__main__':

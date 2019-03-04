@@ -81,8 +81,8 @@ class ChatQADataProcessor(DataProcessor):
                 text_a = tokenization.convert_to_unicode(qa['question'].replace("“",'').replace("”",''))
                 text_b = tokenization.convert_to_unicode(qa['answer'].replace("“",'').replace("”",''))
                 examples.append(InputExample(guid, text_a, text_b))
-        print('count of exceed 100:\t', excp_cnt)
-        print('count of norm: \t', norm_cnt)
+        # print('count of exceed 100:\t', excp_cnt)
+        # print('count of norm: \t', norm_cnt)
         return examples
 
 def convert_single_example(index, example, max_a_length, max_b_length, tokenizer):
@@ -191,8 +191,14 @@ def test_ChatQADataProcessor():
             max_a_len = len(example.text_a)
         if max_b_len < len(example.text_b):
             max_b_len = len(example.text_b)
+    for i in range(10):
+        print('====> dialog:')
+        print('\ta:\t', train_examples[i].text_a)
+        print('\tb:\t', train_examples[i].text_b)
+        print('\n')
     print('max_a_len:\t', max_a_len)
     print('max_b_len:\t', max_b_len)
+    print('dialog count:\t', len(train_examples))
 
 
 def test_file_based_convert_examples_to_features():
@@ -215,10 +221,19 @@ def test_file_based_input_fn_builder():
     ds = input_fn(batch_size)
     iterator = ds.make_one_shot_iterator()
     batch_inputs = iterator.get_next()
+    trainDatas = None
+    vocab_file = './model/chinese_L-12_H-768_A-12/vocab.txt'
+    tokenizer = tokenization.FullTokenizer(vocab_file)
     with tf.Session() as sess:
         trainDatas = sess.run(batch_inputs)
-        print('hello world!')
-    print('test_file_based_input_fn_builder')
+        for i in range(trainDatas['x'].shape[0]):
+            a = tokenizer.convert_ids_to_tokens(trainDatas['x'][0])
+            b = tokenizer.convert_ids_to_tokens(trainDatas['x'][1])
+            print('====> dialog:')
+            print('\ta:\t', a)
+            print('\tb:\t', b)
+            print('\n')
+    print('test_file_based_input_fn_builder end!')
 
 if __name__ == '__main__':
     # test_ChatQADataProcessor()
