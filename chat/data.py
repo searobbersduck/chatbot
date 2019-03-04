@@ -227,8 +227,8 @@ def test_file_based_input_fn_builder():
     with tf.Session() as sess:
         trainDatas = sess.run(batch_inputs)
         for i in range(trainDatas['x'].shape[0]):
-            a = tokenizer.convert_ids_to_tokens(trainDatas['x'][0])
-            b = tokenizer.convert_ids_to_tokens(trainDatas['x'][1])
+            a = tokenizer.convert_ids_to_tokens(trainDatas['x'][i])
+            b = tokenizer.convert_ids_to_tokens(trainDatas['y'][i])
             print('====> dialog:')
             print('\ta:\t', a)
             print('\tb:\t', b)
