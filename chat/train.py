@@ -48,7 +48,7 @@ def train():
         max_x_len, max_y_len, decode_max_len,
         tokenizer.vocab, config_file, ckpt_file, beam_width
     )
-    os.makedirs(log_dir)
+    os.makedirs(log_dir, exist_ok=True)
     graph = tf.Graph()
     with graph.as_default():
         input_fn = file_based_input_fn_builder(train_file, max_x_len, max_y_len, True, True)
