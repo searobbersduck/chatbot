@@ -58,7 +58,7 @@ def train():
         chat_model = ChatModel(chatmodel_config)
         loss, distance, predictions = chat_model.loss()
         num_train_steps = int(train_nums/batch_size*epochs)
-        num_warmup_steps = num_train_steps * warmup_proportion
+        num_warmup_steps = int(num_train_steps * warmup_proportion)
         train_op = optimization.create_optimizer(
             loss, lr, num_train_steps, num_warmup_steps, False)
         saver = tf.train.Saver()
