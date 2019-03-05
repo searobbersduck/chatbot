@@ -10,7 +10,6 @@ from data import file_based_input_fn_builder
 from model import ChatModelConfig, ChatModel
 import bert
 from bert import tokenization
-from bert.tokenization import FullTokenizer
 from bert import optimization
 from bert.optimization import create_optimizer
 
@@ -28,22 +27,23 @@ def make_feed_dict(model, inputs, droprate):
 def train():
     parser = configparser.ConfigParser()
     parser.read('params.ini')
-    max_x_len = parser.get('chat_model', 'max_x_len')
-    max_y_len = parser.get('chat_model', 'max_y_len')
-    decode_max_len = parser.get('chat_model', 'decode_max_len')
+    max_x_len = int(parser.get('chat_model', 'max_x_len'))
+    max_y_len = int(parser.get('chat_model', 'max_y_len'))
+    decode_max_len = int(parser.get('chat_model', 'decode_max_len'))
     vocab_file = parser.get('chat_model', 'vocab_file')
     config_file = parser.get('chat_model', 'config_file')
     ckpt_file = parser.get('chat_model', 'ckpt_file')
-    beam_width = parser.get('chat_model', 'beam_width')
-    batch_size = parser.get('chat_model', 'batch_size')
-    lr = parser.get('chat_model', 'lr')
-    train_nums = parser.get('chat_model', 'train_data_size')
-    warmup_proportion = parser.get('chat_model', 'warmup_proportion')
-    epochs = parser.get('chat_model', 'epochs')
+    beam_width = int(parser.get('chat_model', 'beam_width'))
+    batch_size = int(parser.get('chat_model', 'batch_size'))
+    lr = float(parser.get('chat_model', 'lr'))
+    train_nums = int(parser.get('chat_model', 'train_data_size'))
+    warmup_proportion = float(parser.get('chat_model', 'warmup_proportion'))
+    epochs = int(parser.get('chat_model', 'epochs'))
     log_dir = parser.get('chat_model', 'log_dir')
     data_dir = parser.get('chat_model', 'data_dir')
     train_file = os.path.join(data_dir, 'train.tfrecord')
-    tokenizer = FullTokenizer(vocab_file)
+    # vocab_file = './model/chinese_L-12_H-768_A-12/vocab.txt'
+    tokenizer = tokenization.FullTokenizer(vocab_file)
     chatmodel_config = ChatModelConfig(
         max_x_len, max_y_len, decode_max_len,
         tokenizer.vocab, config_file, ckpt_file, beam_width
