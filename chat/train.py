@@ -3,6 +3,7 @@
 import os
 import sys
 sys.path.append('./bert/')
+sys.path.append('./')
 import tensorflow as tf
 import configparser
 from data import file_based_input_fn_builder
