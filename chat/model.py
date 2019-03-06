@@ -214,11 +214,14 @@ class ChatModel:
         t_output, p_output = self.create_model()
         decode_len = tf.shape(t_output.sample_id)[-1]
         y_target = self.y[:, decode_len]
-        y_target = tf.reshape(y_target, [-1])
         mask_len = tf.maximum(decode_len, self.y_len)
         y_mask = tf.sequence_mask(
             mask_len, self.max_y_len, dtype=tf.float32
         )
+        print('yyyyy0')
+        print(tf.shape(t_output.rnn_output))
+        print(tf.shape(y_target))
+        print('yyyyy1')
         loss = tf.contrib.seq2seq.sequence_loss(
             t_output.rnn_output, y_target, weights=y_mask
         )
