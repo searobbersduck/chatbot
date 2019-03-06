@@ -103,8 +103,7 @@ class ChatModel:
                                     input_mask = self.x_mask,
                                     token_type_ids = self.x_seg,
                                     is_training=True,
-                                    use_one_hot_embeddings=False,
-                                    droprate = self.dropout_rate)
+                                    use_one_hot_embeddings=False)
         if self.ckpt_file is not None:
             tvars = tf.trainable_variables()
             self.assignment_map, self.initialized_variable_map = modeling.get_assignment_map_from_checkpoint(
