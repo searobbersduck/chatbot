@@ -50,6 +50,7 @@ def train():
     )
     os.makedirs(log_dir, exist_ok=True)
     graph = tf.Graph()
+    step = 0
     with graph.as_default():
         input_fn = file_based_input_fn_builder(train_file, max_x_len, max_y_len, True, True)
         ds = input_fn(batch_size)
@@ -78,7 +79,8 @@ def train():
                     train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
-                    if tf.train.get_global_step() % 100 == 0:
+                    step += 1
+                    if step % 100 == 0:
                         print('[train loss]:\t', train_loss)
                         print('[predict acc]:\t', distance)
             except KeyboardInterrupt as e:
