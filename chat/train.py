@@ -90,7 +90,7 @@ def train():
             except KeyboardInterrupt as e:
                 with open('./log/eval_log.txt', 'w', encoding='utf8') as f:
                     for log in eval_log:
-                        f.write(log)
+                        f.write(' '.join(list(log)))
                         f.write('\n')
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
