@@ -85,6 +85,7 @@ def train():
                         print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
                             step, train_loss))
                         eval_val = sess._tf_sess().run([predictions], feed_dict)
+                        print(tokenizer.convert_ids_to_tokens(eval_val[0][0]))
                         eval_log.append(tokenizer.convert_ids_to_tokens(eval_val[0][0]))
                         eval_log.append(eval_val[0][0])
                     step += 1
