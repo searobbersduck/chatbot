@@ -70,7 +70,7 @@ def train():
                                                config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
             best_loss = float('inf')
             best_acc = 0
-            sess.run(tf.global_variables_initializer())
+            # sess.run(tf.global_variables_initializer())
             try:
                 while not sess.should_stop():
                     trainDatas = sess.run(batch_inputs)
