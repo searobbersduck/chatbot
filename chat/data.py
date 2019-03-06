@@ -159,6 +159,7 @@ def file_based_input_fn_builder(input_file, max_a_len, max_b_len, is_training, d
 
     def _decode_record(record, name_to_features):
         example = tf.parse_single_example(record, name_to_features)
+        example['y'].set_shape([100])
         for name in example.keys():
             t = example[name]
             if t.dtype == tf.int64:
