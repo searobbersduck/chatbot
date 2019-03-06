@@ -213,12 +213,13 @@ class ChatModel:
     def loss(self):
         t_output, p_output = self.create_model()
         decode_len = tf.shape(t_output.sample_id)[-1]
+        y_target = self.y[:, decode_len]
         mask_len = tf.maximum(decode_len, self.y_len)
         y_mask = tf.sequence_mask(
             mask_len, self.max_y_len, dtype=tf.float32
         )
         loss = tf.contrib.seq2seq.sequence_loss(
-            t_output.rnn_output, self.y, weights=y_mask
+            t_output.rnn_output, y_target, weights=y_mask
         )
         p_output_sparse = self._convert_tensor_to_sparse(p_output, self.end_token)
         y_output_sparse = self._convert_tensor_to_sparse(self.y, self.end_token)
