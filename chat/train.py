@@ -51,6 +51,7 @@ def train():
     os.makedirs(log_dir, exist_ok=True)
     graph = tf.Graph()
     step = 0
+    eval_log = []
     with graph.as_default():
         input_fn = file_based_input_fn_builder(train_file, max_x_len, max_y_len, True, True)
         ds = input_fn(batch_size)
@@ -83,13 +84,16 @@ def train():
                         print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
                             step, train_loss))
                         eval_val = sess._tf_sess().run([predictions], feed_dict)
-                        print(tokenizer.convert_ids_to_tokens(eval_val[0][0]))
+                        eval_log.append(tokenizer.convert_ids_to_tokens(eval_val[0][0]))
                     step += 1
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
                 print(e)
-
+        with open('./log/eval_log.txt', 'w', encoding='utf8') as f:
+            for log in eval_log:
+                f.write(log)
+                f.write('\n')
 
 if __name__ == '__main__':
     train()
