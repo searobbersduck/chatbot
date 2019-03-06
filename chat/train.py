@@ -58,7 +58,7 @@ def train():
         batch_inputs = iterator.get_next()
         chat_model = ChatModel(chatmodel_config)
         loss, distance, predictions = chat_model.loss()
-        _, eval = chat_model.inference()
+        _, eval = chat_model.create_model()
         num_train_steps = int(train_nums/batch_size*epochs)
         num_warmup_steps = int(num_train_steps * warmup_proportion)
         train_op = optimization.create_optimizer(
