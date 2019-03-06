@@ -74,11 +74,12 @@ def train():
             try:
                 while not sess.should_stop():
                     print('xxxxx0')
-                    trainDatas = sess.run(batch_inputs)
-                    # feed_dict = make_feed_dict(chat_model, trainDatas)
-                    # train_loss, _ = sess.run(
-                    #     [loss, train_op], feed_dict=feed_dict
-                    # )
+                    # trainDatas = sess.run(batch_inputs)
+                    trainDatas = batch_inputs
+                    feed_dict = make_feed_dict(chat_model, trainDatas)
+                    train_loss, _ = sess.run(
+                        [loss, train_op], feed_dict=feed_dict
+                    )
                     # if tf.train.get_global_step() % 10 == 0:
                     #     print('train loss:\t', train_loss)
             except KeyboardInterrupt as e:
