@@ -82,8 +82,8 @@ def train():
                         [loss, train_op], feed_dict=feed_dict
                     )
                     print('xxxxx3')
-                    if tf.train.get_global_step() % 10 == 0:
-                        print('train loss:\t', train_loss)
+                    # if tf.train.get_global_step() % 10 == 0:
+                    #     print('train loss:\t', train_loss)
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
