@@ -222,13 +222,14 @@ class ChatModel:
         loss = tf.contrib.seq2seq.sequence_loss(
             t_output.rnn_output, y_target, weights=y_mask
         )
-        p_output_sparse = self._convert_tensor_to_sparse(p_output, self.end_token)
-        y_output_sparse = self._convert_tensor_to_sparse(self.y, self.end_token)
-        distance = tf.reduce_sum(
-            tf.edit_distance(
-                p_output_sparse, y_output_sparse, normalize=False
-            )
-        )
+        # p_output_sparse = self._convert_tensor_to_sparse(p_output, self.end_token)
+        # y_output_sparse = self._convert_tensor_to_sparse(self.y, self.end_token)
+        # distance = tf.reduce_sum(
+        #     tf.edit_distance(
+        #         p_output_sparse, y_output_sparse, normalize=False
+        #     )
+        # )
+        distance = None
         return loss, distance, p_output
 
     def _convert_tensor_to_sparse(self, a, end_token):
