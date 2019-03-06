@@ -74,11 +74,11 @@ def train():
             try:
                 while not sess.should_stop():
                     print('xxxxx0')
-                    trainDatas = sess.run(batch_inputs)
+                    trainDatas = sess._tf_sess().run(batch_inputs)
                     print('xxxxx1')
-                    feed_dict = make_feed_dict(chat_model, trainDatas)
+                    feed_dict = make_feed_dict(chat_model, trainDatas, 0.1)
                     print('xxxxx2')
-                    train_loss, _ = sess.run(
+                    train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
                     if tf.train.get_global_step() % 10 == 0:
