@@ -63,6 +63,7 @@ def train():
             loss, lr, num_train_steps, num_warmup_steps, False)
         saver = tf.train.Saver()
         scaf = tf.train.Scaffold(saver=saver)
+        tf.Session().run(tf.global_variables_initializer())
         with tf.train.MonitoredTrainingSession(checkpoint_dir=log_dir,
                                                scaffold=scaf,
                                                hooks=[tf.train.StopAtStepHook(last_step=num_train_steps),
@@ -70,7 +71,6 @@ def train():
                                                config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
             best_loss = float('inf')
             best_acc = 0
-            # sess.run(tf.global_variables_initializer())
             try:
                 while not sess.should_stop():
                     trainDatas = sess.run(batch_inputs)
