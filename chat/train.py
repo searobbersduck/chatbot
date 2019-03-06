@@ -76,13 +76,13 @@ def train():
                 while not sess.should_stop():
                     trainDatas = sess._tf_sess().run(batch_inputs)
                     feed_dict = make_feed_dict(chat_model, trainDatas, 0.1)
-                    train_loss, predict_distance, _ = sess._tf_sess().run(
+                    train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
                     step += 1
                     if step % 100 == 0:
-                        print('====> step:{:06d}\t[train loss:{:.3f}]\t[predict acc:{:.3f}]'.format(
-                            step, train_loss, predict_distance))
+                        print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
+                            step, train_loss))
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
