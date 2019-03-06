@@ -36,6 +36,7 @@ def train():
     beam_width = int(parser.get('chat_model', 'beam_width'))
     batch_size = int(parser.get('chat_model', 'batch_size'))
     lr = float(parser.get('chat_model', 'lr'))
+    dropout_rate = float(parser.get('chat_model', 'dropout_rate'))
     train_nums = int(parser.get('chat_model', 'train_data_size'))
     warmup_proportion = float(parser.get('chat_model', 'warmup_proportion'))
     epochs = int(parser.get('chat_model', 'epochs'))
@@ -46,7 +47,7 @@ def train():
     tokenizer = tokenization.FullTokenizer(vocab_file)
     chatmodel_config = ChatModelConfig(
         max_x_len, max_y_len, decode_max_len,
-        tokenizer.vocab, config_file, ckpt_file, beam_width
+        tokenizer.vocab, config_file, dropout_rate, ckpt_file, beam_width
     )
     os.makedirs(log_dir, exist_ok=True)
     graph = tf.Graph()

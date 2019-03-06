@@ -66,7 +66,7 @@ class MyOutputProjectionWrapper(tf.contrib.rnn.RNNCell):
 
 class ChatModelConfig:
     def __init__(self, max_x_len, max_y_len, max_decode_len,
-                 vocab, config_file, ckpt_file=None, beam_width=5):
+                 vocab, config_file, dropout_rate, ckpt_file=None, beam_width=5):
         self.max_x_len = max_x_len
         self.max_y_len = max_y_len
         self.max_decode_len = max_decode_len
@@ -74,6 +74,7 @@ class ChatModelConfig:
         self.config_file = config_file
         self.ckpt_file = ckpt_file
         self.beam_width = beam_width
+        self.dropout_rate = dropout_rate
 
 class ChatModel:
     def __init__(self, chatmodel_config):
@@ -85,6 +86,7 @@ class ChatModel:
         self.config_file = chatmodel_config.config_file
         self.ckpt_file = chatmodel_config.ckpt_file
         self.beam_width = chatmodel_config.beam_width
+        self.dropout_rate = chatmodel_config.dropout_rate
         self.x = tf.placeholder(tf.int32, shape=[None, self.max_x_len], name='x')
         self.x_mask = tf.placeholder(tf.int32, shape=[None, self.max_x_len], name='x_mask')
         self.x_seg = tf.placeholder(tf.int32, shape=[None, self.max_x_len], name='x_seg')
@@ -250,7 +252,8 @@ def test_ChatModel():
         vocab=tokenizer.vocab,
         config_file=config_file,
         ckpt_file=ckpt_file,
-        beam_width=5
+        beam_width=5,
+        dropout_rate=0.5
     )
     chatmodel = ChatModel(chatmodel_config)
     loss, distance, p_output = chatmodel.loss()
