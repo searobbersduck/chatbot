@@ -83,7 +83,7 @@ def train():
                         print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
                             step, train_loss))
                         eval_val = sess._tf_sess().run([predictions], feed_dict)
-                        print(tokenizer.convert_ids_to_tokens(eval_val[0]))
+                        print(tokenizer.convert_ids_to_tokens(eval_val[0][0]))
                     step += 1
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
