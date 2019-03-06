@@ -64,6 +64,7 @@ def train():
         saver = tf.train.Saver()
         scaf = tf.train.Scaffold(saver=saver)
         with tf.train.MonitoredTrainingSession(checkpoint_dir=log_dir,
+                                               scaffold=scaf,
                                                hooks=[tf.train.StopAtStepHook(last_step=num_train_steps),
                                                       tf.train.NanTensorHook(loss)],
                                                config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
