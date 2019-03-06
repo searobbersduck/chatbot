@@ -68,7 +68,7 @@ def train():
                                                scaffold=scaf,
                                                hooks=[tf.train.StopAtStepHook(last_step=num_train_steps),
                                                       tf.train.NanTensorHook(loss)],
-                                               config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=True)) as sess:
+                                               config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)) as sess:
             best_loss = float('inf')
             best_acc = 0
             try:
