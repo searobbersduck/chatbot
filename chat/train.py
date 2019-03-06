@@ -1,5 +1,10 @@
 # !/usr/bin/env python3
 
+'''
+note: if run on ubuntu, do following code:
+export LC_CTYPE=C.UTF-8
+'''
+
 import os
 import sys
 sys.path.append('./bert/')
