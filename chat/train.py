@@ -97,7 +97,7 @@ def train():
                 print(e)
         with open('./eval_log.txt', 'w', encoding='utf8') as f:
             for log in eval_log:
-                f.write(log)
+                f.write(' '.join(list(log)))
                 f.write('\n')
 
 if __name__ == '__main__':
