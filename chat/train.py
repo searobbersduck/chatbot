@@ -87,8 +87,8 @@ def train():
                         [loss, train_op], feed_dict=feed_dict
                     )
                     if step % 100 == 0:
-                        print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
-                            step, train_loss))
+                        print('====> step:{:06d}|{}\t[train loss:{:.3f}]'.format(
+                            step, num_train_steps, train_loss))
                         eval_val = sess._tf_sess().run([predictions], feed_dict)
                         print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][0])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0][0])))
