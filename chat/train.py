@@ -58,7 +58,6 @@ def train():
         batch_inputs = iterator.get_next()
         chat_model = ChatModel(chatmodel_config)
         loss, distance, predictions = chat_model.loss()
-        _, eval = chat_model.create_model()
         num_train_steps = int(train_nums/batch_size*epochs)
         num_warmup_steps = int(num_train_steps * warmup_proportion)
         train_op = optimization.create_optimizer(
@@ -83,7 +82,7 @@ def train():
                     if step % 100 == 0:
                         print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
                             step, train_loss))
-                        eval_val = sess._tf_sess().run([eval], feed_dict)
+                        eval_val = sess._tf_sess().run([predictions], feed_dict)
                         print(tokenizer.convert_ids_to_tokens(eval_val[0]))
                     step += 1
             except KeyboardInterrupt as e:
