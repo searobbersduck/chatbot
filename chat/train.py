@@ -81,6 +81,7 @@ def train():
                     train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
+                    print('xxxxx3')
                     if tf.train.get_global_step() % 10 == 0:
                         print('train loss:\t', train_loss)
             except KeyboardInterrupt as e:
