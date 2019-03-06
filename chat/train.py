@@ -58,6 +58,7 @@ def train():
         batch_inputs = iterator.get_next()
         chat_model = ChatModel(chatmodel_config)
         loss, distance, predictions = chat_model.loss()
+        _, eval = chat_model.inference()
         num_train_steps = int(train_nums/batch_size*epochs)
         num_warmup_steps = int(num_train_steps * warmup_proportion)
         train_op = optimization.create_optimizer(
@@ -79,10 +80,12 @@ def train():
                     train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
-                    step += 1
                     if step % 100 == 0:
                         print('====> step:{:06d}\t[train loss:{:.3f}]'.format(
                             step, train_loss))
+                        eval_val = sess._tf_sess().run([eval], feed_dict)
+                        print(tokenizer.convert_ids_to_tokens(eval_val[0]))
+                    step += 1
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
