@@ -73,17 +73,13 @@ def train():
             best_acc = 0
             try:
                 while not sess.should_stop():
-                    print('xxxxx0')
                     trainDatas = sess._tf_sess().run(batch_inputs)
-                    print('xxxxx1')
                     feed_dict = make_feed_dict(chat_model, trainDatas, 0.1)
-                    print('xxxxx2')
                     train_loss, _ = sess._tf_sess().run(
                         [loss, train_op], feed_dict=feed_dict
                     )
-                    print('xxxxx3')
-                    # if tf.train.get_global_step() % 10 == 0:
-                    #     print('train loss:\t', train_loss)
+                    if tf.train.get_global_step() % 100 == 0:
+                        print('[train loss]:\t', train_loss)
             except KeyboardInterrupt as e:
                 saver.save(sess._sess, os.path.join(log_dir, 'except_model'), global_step=tf.train.get_or_create_global_step())
             except Exception as e:
