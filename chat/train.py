@@ -74,8 +74,8 @@ def train():
             try:
                 while not sess.should_stop():
                     print('xxxxx0')
-                    # trainDatas = sess.run(batch_inputs)
-                    trainDatas = batch_inputs
+                    trainDatas = sess.run(batch_inputs)
+                    # trainDatas = batch_inputs
                     feed_dict = make_feed_dict(chat_model, trainDatas)
                     train_loss, _ = sess.run(
                         [loss, train_op], feed_dict=feed_dict
