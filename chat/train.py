@@ -45,6 +45,8 @@ def train():
     train_nums = int(parser.get('chat_model', 'train_data_size'))
     warmup_proportion = float(parser.get('chat_model', 'warmup_proportion'))
     epochs = int(parser.get('chat_model', 'epochs'))
+    length_penalty_weight = float(parser.get('chat_model', 'length_penalty_weight'))
+    coverage_penalty_weight = float(parser.get('chat_model', 'coverage_penalty_weight'))
     log_dir = parser.get('chat_model', 'log_dir')
     data_dir = parser.get('chat_model', 'data_dir')
     train_file = os.path.join(data_dir, 'train.tfrecord')
@@ -52,7 +54,8 @@ def train():
     tokenizer = tokenization.FullTokenizer(vocab_file)
     chatmodel_config = ChatModelConfig(
         max_x_len, max_y_len, decode_max_len,
-        tokenizer.vocab, config_file, dropout_rate, ckpt_file, beam_width
+        tokenizer.vocab, config_file, dropout_rate, ckpt_file, beam_width,
+        coverage_penalty_weight, length_penalty_weight
     )
     os.makedirs(log_dir, exist_ok=True)
     graph = tf.Graph()
