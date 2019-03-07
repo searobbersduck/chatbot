@@ -78,8 +78,7 @@ def train():
         with tf.train.MonitoredTrainingSession(checkpoint_dir=log_dir,
                                                hooks=[tf.train.StopAtStepHook(last_step=num_train_steps),
                                                       tf.train.NanTensorHook(loss)],
-                                               config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False),
-                                               save_checkpoint_steps=100) as sess:
+                                               config=tf.ConfigProto(allow_soft_placement=True, log_device_placement=False)) as sess:
             best_loss = float('inf')
             best_acc = 0
             try:
