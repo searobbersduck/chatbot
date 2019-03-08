@@ -67,7 +67,7 @@ def train():
         iterator = ds.make_one_shot_iterator()
         batch_inputs = iterator.get_next()
         chat_model = ChatModel(chatmodel_config)
-        loss, distance, predictions = chat_model.loss()
+        loss, distance, predictions, train_predictions = chat_model.loss()
         num_train_steps = int(train_nums/batch_size*epochs)
         num_warmup_steps = int(num_train_steps * warmup_proportion)
         train_op = optimization.create_optimizer(
@@ -91,9 +91,13 @@ def train():
                     if step % 100 == 0:
                         print('====> step:{:06d}|{}\t[train loss:{:.3f}]'.format(
                             step, num_train_steps, train_loss))
-                        eval_val = sess._tf_sess().run([predictions], feed_dict)
+                        eval_val, train_val = sess._tf_sess().run([predictions, train_predictions], feed_dict)
                         print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][0])))
                         print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][0])))
+                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[0][0])))
+                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[0][1])))
+                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[0][2])))
+                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[0][3])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0][0])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0][1])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0][2])))
