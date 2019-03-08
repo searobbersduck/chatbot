@@ -239,7 +239,7 @@ class ChatModel:
                 p_output_sparse, y_output_sparse, normalize=False
             )
         )
-        return loss, distance, p_output, t_output.sample_id
+        return loss, distance, p_output, t_output.predicted_ids
 
     def _convert_tensor_to_sparse(self, a, end_token):
         indices = tf.where(tf.not_equal(a, 0)&tf.not_equal(a, end_token))
