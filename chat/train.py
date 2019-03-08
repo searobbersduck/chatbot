@@ -99,7 +99,7 @@ def train():
                         # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[2])))
                         # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(train_val[3])))
                         print(train_val)
-                        print(train.shape)
+                        print(train_val.shape)
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[1])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[2])))
