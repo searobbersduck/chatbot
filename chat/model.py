@@ -194,7 +194,7 @@ class ChatModel:
                 initial_state = initial_state.clone(
                     cell_state = tiled_encoder_state
                 )
-                self.end_token = self.vocab['[PAD]']
+                self.end_token = self.vocab['<T>']
                 beamDecoder = tf.contrib.seq2seq.BeamSearchDecoder(
                     cell=out_cell,
                     embedding=self.embeddings,
