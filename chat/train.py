@@ -94,6 +94,12 @@ def train():
                         eval_val, train_val = sess._tf_sess().run([predictions, train_predictions], feed_dict)
                         print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][0])))
                         print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][0])))
+                        print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][1])))
+                        print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][1])))
+                        print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][2])))
+                        print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][2])))
+                        print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][3])))
+                        print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][3])))
                         v1 = train_val[0]
                         v1[v1<0] = 100
                         v2 = train_val[1]
