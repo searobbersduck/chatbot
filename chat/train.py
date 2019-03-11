@@ -100,19 +100,19 @@ def train():
                         print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][2])))
                         print('question:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['x'][3])))
                         print('groud truth:\t', ''.join(tokenizer.convert_ids_to_tokens(trainDatas['y'][3])))
-                        v1 = train_val[0]
-                        v1[v1<0] = 100
-                        v2 = train_val[1]
-                        v2[v2 < 0] = 100
-                        v3 = train_val[2]
-                        v3[v3 < 0] = 100
-                        v4 = train_val[3]
-                        v4[v4 < 0] = 100
-                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v1)))
-                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v2)))
-                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v3)))
-                        print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v4)))
-                        print(train_val.shape)
+                        # v1 = train_val[0]
+                        # v1[v1<0] = 100
+                        # v2 = train_val[1]
+                        # v2[v2 < 0] = 100
+                        # v3 = train_val[2]
+                        # v3[v3 < 0] = 100
+                        # v4 = train_val[3]
+                        # v4[v4 < 0] = 100
+                        # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v1)))
+                        # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v2)))
+                        # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v3)))
+                        # print('train predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(v4)))
+                        # print(train_val.shape)
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[0])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[1])))
                         print('predictions:\t', ''.join(tokenizer.convert_ids_to_tokens(eval_val[2])))
