@@ -124,7 +124,7 @@ class ChatModel:
         start_token = tf.ones([batch_size], dtype=tf.int32)*self.vocab['<S>']
         train_output = tf.concat([tf.expand_dims(start_token, 1), self.y], 1)
         output_emb = tf.nn.embedding_lookup(self.embeddings, train_output)
-        output_len = self.y_len - 1
+        output_len = self.y_len
         train_helper = tf.contrib.seq2seq.ScheduledEmbeddingTrainingHelper(
             output_emb, output_len, self.embeddings, 0.1
         )
