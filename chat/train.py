@@ -49,7 +49,8 @@ def train():
     coverage_penalty_weight = float(parser.get('chat_model', 'coverage_penalty_weight'))
     log_dir = parser.get('chat_model', 'log_dir')
     data_dir = parser.get('chat_model', 'data_dir')
-    train_file = os.path.join(data_dir, 'train.tfrecord')
+    train_file = parser.get('chat_model', 'train_file')
+    train_file = os.path.join(data_dir, train_file)
     # vocab_file = './model/chinese_L-12_H-768_A-12/vocab.txt'
     tokenizer = tokenization.FullTokenizer(vocab_file)
     chatmodel_config = ChatModelConfig(
