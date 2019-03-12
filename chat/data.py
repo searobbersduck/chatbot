@@ -56,6 +56,14 @@ class DataProcessor(object):
 
 
 class ChatQADataProcessor(DataProcessor):
+    def __init__(self, max_qs_len=120,
+                 max_as_len=100,
+                 min_qs_len=2,
+                 min_as_len=2):
+        self.max_qs_len = max_qs_len
+        self.max_as_len = max_as_len
+        self.min_qs_len = min_qs_len
+        self.min_as_len = min_as_len
     def get_train_examples(self, data_dir):
         return self._create_examples(os.path.join(data_dir, 'dialog.txt'), 'train')
     def get_dev_examples(self, data_dir):
@@ -63,6 +71,12 @@ class ChatQADataProcessor(DataProcessor):
     def get_test_examples(self, data_dir):
         return self._create_examples(os.path.join(data_dir, 'dialog.txt'), 'test')
     def _create_examples(self, infile, set_type):
+        def replace_str(str):
+            str.replace("“", '').\
+                replace("”", '').replace('‘', "'").replace('’', "'").\
+                replace('```', '…').replace('`', '').replace('—', '…').\
+                replace('―', '…').replace('─','…').replace('┄', '…')
+            return str
         examples = []
         excp_cnt = 0
         norm_cnt = 0
@@ -71,15 +85,18 @@ class ChatQADataProcessor(DataProcessor):
             for i,qa in enumerate(qas_list):
                 if 'question' not in qa or 'answer' not in qa:
                     continue
-                if len(qa['question']) > 120 or len(qa['answer']) > 100:
+                if len(qa['question']) > self.max_qs_len or \
+                        len(qa['answer']) > self.max_as_len or \
+                        len(qa['question']) < self.min_qs_len or \
+                        len(qa['answer']) < self.min_as_len:
                     excp_cnt += 1
                     continue
                 if '?' not in qa['question'] and '？' not in qa['question']:
                     continue
                 norm_cnt += 1
                 guid = "%s-%s" % (set_type, i)
-                text_a = tokenization.convert_to_unicode(qa['question'].replace("“",'').replace("”",''))
-                text_b = tokenization.convert_to_unicode(qa['answer'].replace("“",'').replace("”",''))
+                text_a = tokenization.convert_to_unicode(replace_str(qa['question']))
+                text_b = tokenization.convert_to_unicode(replace_str(qa['answer']))
                 examples.append(InputExample(guid, text_a, text_b))
         # print('count of exceed 100:\t', excp_cnt)
         # print('count of norm: \t', norm_cnt)
@@ -180,6 +197,56 @@ def file_based_input_fn_builder(input_file, max_a_len, max_b_len, is_training, d
     return input_fn
 
 
+def check_unknown_char(examples, max_a_len, max_b_len, tokenizer, output_file):
+
+    def convert_single_example1(index, example, max_a_length, max_b_length, tokenizer):
+        tokens_a = tokenizer.tokenize(example.text_a)
+        tokens_b = tokenizer.tokenize(example.text_b)
+        if len(tokens_a) > max_a_length - 2:
+            tokens_a = tokens_a[0:max_a_length - 2]
+        tokens_aa = []
+        segment_ids = []
+        tokens_aa.append("[CLS]")
+        segment_ids.append(0)
+        for token in tokens_a:
+            tokens_aa.append(token)
+            segment_ids.append(0)
+        tokens_aa.append('[SEP]')
+        segment_ids.append(0)
+        x = tokenizer.convert_tokens_to_ids(tokens_aa)
+        y = tokenizer.convert_tokens_to_ids(tokens_b)
+        log = []
+        log_txt = ''
+        if 100 in x:
+            ind = [i for i, xx in enumerate(x) if xx == 100]
+            chars = [example.text_a[i-1] for i in ind]
+            log += chars
+            log_txt += str(chars) + '\t:\t' + example.text_a
+        if 100 in y:
+            ind = [i for i, yy in enumerate(y) if yy == 100]
+            chars = [example.text_b[i] for i in ind]
+            log += chars
+            log_txt += str(chars) + '\t:\t' + example.text_b
+        return log, log_txt
+
+    oov_chars = []
+    oov_txt = []
+    for index, example in enumerate(examples):
+        if index % 10000 == 0:
+            print('Writting example {} of {}'.format(index, len(examples)))
+        log, log_txt = convert_single_example1(index, example, max_a_len, max_b_len, tokenizer)
+        oov_chars += log
+        if log_txt != '':
+            oov_txt.append(log_txt)
+    counter = collections.Counter(oov_chars)
+    with open('../data/dialog/oov_txt.txt', 'w', encoding='utf8') as f:
+        f.write('\n'.join(oov_txt))
+    with open('../data/dialog/oov_vocab.txt', 'w', encoding='utf8') as f:
+        f.write('\n'.join(list(counter)))
+    print(counter)
+
+
+
 def test_ChatQADataProcessor():
     indir = '../data/dialog'
     processor = ChatQADataProcessor()
@@ -235,9 +302,22 @@ def test_file_based_input_fn_builder():
             print('\n')
     print('test_file_based_input_fn_builder end!')
 
+
+def test_check_unknown_char():
+    indir = '../data/dialog'
+    train_file = '../data/dialog/train.tfrecord'
+    processor = ChatQADataProcessor()
+    train_examples = processor.get_train_examples(indir)
+    max_a_length = 128
+    max_b_length = 100
+    vocab_file = './model/chinese_L-12_H-768_A-12/vocab.txt'
+    tokenizer = tokenization.FullTokenizer(vocab_file)
+    check_unknown_char(train_examples, max_a_length, max_b_length, tokenizer, train_file)
+
 if __name__ == '__main__':
     # test_ChatQADataProcessor()
-    # test_file_based_convert_examples_to_features()
-    test_file_based_input_fn_builder()
+    test_file_based_convert_examples_to_features()
+    # test_file_based_input_fn_builder()
+    # test_check_unknown_char()
     # fire.Fire()
 
